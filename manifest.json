@@ -1,0 +1,16 @@
+{
+    "name": "CF Contest Rating",
+    "description": "Build an Extension!",
+    "version": "0.1",
+    "manifest_version": 3,
+    "content_scripts": [
+        {
+            "matches": ["https://codeforces.com/contest/*"],
+            "js": ["content-script.js"]
+        }
+    ],
+    "permissions": [
+        "storage",
+        "unlimitedStorage"
+    ]
+}
