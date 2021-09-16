@@ -1,7 +1,128 @@
-console.log('cf extension loaded')
+console.log('cf extension loaded');
+const orgstandings = document.createElement("li");
+const anchornode = document.createElement("a");
+anchornode.href = "#"
+const textnode = document.createTextNode("Organization Standings");
+anchornode.appendChild(textnode)
+orgstandings.appendChild(anchornode)
+var parent = document.querySelector("ul.second-level-menu-list")
+parent.appendChild(orgstandings)
+
+// orgstandings.addEventListener('mouseenter', () => {
+//     orgstandings.classList.add("backLava")
+// })
+// orgstandings.addEventListener('mouseleave', () => {
+//     orgstandings.classList.remove("backLava")
+// })
+
+
+
+orgstandings.addEventListener('click', () => {
+    console.log("clicked")
+
+    const label = document.createElement("label")
+    label.htmlFor = "org-filter"
+    const labeltext = document.createTextNode("Select Organization")
+    label.appendChild(labeltext)
+    label.style.marginRight = "5px";
+    const dropdown = document.createElement("select")
+    dropdown.id = "org-filter"
+    
+    const clp = document.querySelector(".custom-links-pagination")
+    clp.innerHTML = " "
+    
+    for( let el in organizationWiseRankList){
+        const orgoption = document.createElement("option")
+        orgoption.value = el
+        const optiontext = document.createTextNode(el)
+        orgoption.appendChild(optiontext)
+        dropdown.appendChild(orgoption)
+    }
+    
+    const tableOuterDiv = document.querySelector(".datatable")
+    const oldStandingsTable = document.querySelector("table.standings").cloneNode(true)
+    tableOuterDiv.innerHTML = ""
+    tableOuterDiv.appendChild(label)
+    tableOuterDiv.appendChild(dropdown)
+
+    console.log(oldStandingsTable)
+    const tbody = oldStandingsTable.querySelector("tbody")
+    const tablerows = tbody.childNodes
+    console.log(tablerows)
+
+    const orgtable = document.createElement("table")
+
+
+    const renderTable = () => {
+        
+        console.log("table renders")
+        
+        const headerrow = document.createElement("tr")
+        const h1 = document.createElement("th")
+        const h2 = document.createElement("th")
+        const h3 = document.createElement("th")
+        const h1Text = document.createTextNode("Organization Rank")
+        const h2Text = document.createTextNode("Global Rank")
+        const h3Text = document.createTextNode("Who")
+        h1.appendChild(h1Text)
+        h2.appendChild(h2Text)
+        h3.appendChild(h3Text)
+        headerrow.appendChild(h1)
+        headerrow.appendChild(h2)
+        headerrow.appendChild(h3)
+
+        headerrow.style.fontWeight = 'bold'
+
+        orgtable.appendChild(headerrow)
+        
+        const currentOrg = dropdown.options[ dropdown.selectedIndex ].value
+        console.log(organizationWiseRankList[currentOrg])
+
+        let handles = organizationWiseRankList[currentOrg]
+
+        for(let i=0; i<handles.length; ++i){
+            const globalRank = handles[i][0]
+            const who = handles[i][1]
+            const orgRank = organizationRankList[who]
+            const contentrow = document.createElement("tr")
+            if(i%2 == 0) contentrow.style.background = 'white'
+            const t1 = document.createElement("td")
+            const t2 = document.createElement("td")
+            const t3 = document.createElement("td")
+            const t1Text = document.createTextNode(orgRank)
+            const t2Text = document.createTextNode(globalRank)
+            const t3Text = document.createTextNode(who)
+            t1.appendChild(t1Text)
+            t2.appendChild(t2Text)
+            t3.appendChild(t3Text)
+            contentrow.appendChild(t1)
+            contentrow.appendChild(t2)
+            contentrow.appendChild(t3)    
+            orgtable.appendChild(contentrow)
+        }
+
+        tableOuterDiv.appendChild(orgtable)
+    }
+
+    renderTable();
+
+    function removeAllChildNodes(parent) {
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
+        }
+    }
+
+    dropdown.addEventListener('change', () => {   
+        removeAllChildNodes(orgtable)
+        renderTable();
+    })
+
+})
+
 
 let rankList = []
 let organizationRankList = []
+let organizationWiseRankList = []
 
 let id = location.href.split('/')[4]
 
@@ -14,11 +135,14 @@ getContestantHandles(id).then(data => {
     data.result.rows.forEach(element => {
         rankList[element.party.members[0].handle] = element.rank
     });
+
     getOrganizations()
 });
 
+
+
 function retrieveDataFromStorage(data) {
-    let organizationWiseRankList = []
+    organizationWiseRankList = []    
     for (let handle in data) {
         let org = data[handle]
         if (org && rankList[handle]) {
