@@ -1,9 +1,75 @@
-console.log('cf extension loaded')
+console.log('cf extension loaded');
+const orgstandings = document.createElement("li");
+const anchornode = document.createElement("a");
+anchornode.href = "#"
+const textnode = document.createTextNode("Organization Standings");
+anchornode.appendChild(textnode)
+orgstandings.appendChild(anchornode)
+var parent = document.querySelector("ul.second-level-menu-list")
+
+
+orgstandings.addEventListener('click', () => {
+    console.log("clicked")
+
+    const label = document.createElement("label")
+    label.htmlFor = "org-filter"
+    const labeltext = document.createTextNode("Select Organization")
+    label.appendChild(labeltext)
+    label.style.marginRight = "5px";
+    const dropdown = document.createElement("select")
+    dropdown.id = "org-filter"
+
+    for( let el in organizationWiseRankList){
+        const orgoption = document.createElement("option")
+        orgoption.value = el
+        const optiontext = document.createTextNode(el)
+        orgoption.appendChild(optiontext)
+        dropdown.appendChild(orgoption)
+    }
+    
+    const standingsTable = document.querySelector("table.standings")
+    Array.prototype.slice.call(standingsTable.getElementsByTagName('th'), 4).forEach( ele => ele.remove())
+    const dark = standingsTable.getElementsByTagName('tr')[1]
+    Array.prototype.slice.call(dark.getElementsByTagName('td'), 4).forEach( ele => ele.remove())
+    const light = standingsTable.getElementsByTagName('tr')[2]
+    Array.prototype.slice.call(light.getElementsByTagName('td'), 4).forEach( ele => ele.remove())
+    const tbody = standingsTable.getElementsByTagName('tbody')[0]
+    Array.prototype.slice.call(tbody.children, 1).forEach( ele => ele.remove())
+    
+    document.querySelector("#pageContent").insertBefore(label, document.querySelector("#pageContent > div.datatable"))
+    document.querySelector("#pageContent").insertBefore(dropdown, document.querySelector("#pageContent > div.datatable"))
+
+    const renderTable = () => {
+        const currentOrg = dropdown.options[ dropdown.selectedIndex ].value
+        let handles = organizationWiseRankList[currentOrg]
+        for(let i=0; i<handles.length; ++i){
+            const who = handles[i][1]
+            let row
+            if(i&1){
+                row = light.cloneNode(true)
+            } else {
+                row = dark.cloneNode(true)
+            }
+            row.getElementsByTagName('td')[0].innerText = handles[i][0]
+            row.getElementsByTagName('td')[1].innerText = countryRankList[who]
+            row.getElementsByTagName('td')[2].innerText = organizationRankList[who]
+            row.getElementsByTagName('td')[3].innerText = who
+            tbody.appendChild(row)
+        }
+    }
+    renderTable()
+    dropdown.addEventListener('change', () => {   
+        Array.prototype.slice.call(tbody.children, 1).forEach( ele => ele.remove())
+        renderTable();
+    })
+
+})
+
 
 let rankList = []
 let organizationRankList = []
 let countryRankList = []
-
+let organizationWiseRankList = []
 let id = location.href.split('/')[4]
 
 async function getContestantHandles(contestId) {
@@ -27,7 +93,7 @@ function generateRankList(data, org = 1) {
             curRankList[org].push([rankList[handle], handle])
         }
     }
-
+    if(org === 1) organizationWiseRankList = curRankList
     for (let key in curRankList) {
         let userList = curRankList[key].sort(function (a, b) {
             return a[0] - b[0];
@@ -49,6 +115,7 @@ function addHeader(title) {
 }
 
 async function updateUI(data) {
+    document.querySelector("#pageContent > div.second-level-menu > ul").insertBefore(orgstandings, document.querySelector("#pageContent > div.second-level-menu > ul > li:nth-child(5)"))
     addHeader("Organization")
     addHeader("Country")
 
