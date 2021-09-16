@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://codeforces.com/contest/*"
+        "https://codeforces.com/contest/*/standings*"
       ],
       "js": [
         "content-script.js"

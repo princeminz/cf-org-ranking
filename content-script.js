@@ -2,7 +2,7 @@ console.log('cf extension loaded');
 const orgstandings = document.createElement("li");
 const anchornode = document.createElement("a");
 anchornode.href = "#"
-const textnode = document.createTextNode("Organization Standings");
+const textnode = document.createTextNode("Country and organization standings");
 anchornode.appendChild(textnode)
 orgstandings.appendChild(anchornode)
 var parent = document.querySelector("ul.second-level-menu-list")
@@ -110,7 +110,7 @@ function addHeader(title) {
     let th = document.createElement("th")
     th.className = 'top'
     th.style = 'width:2em;'
-    th.innerText = title + ' #'
+    th.innerText = title + ' Rank'
     document.getElementsByClassName('standings')[0].rows[0].insertBefore(th, document.getElementsByClassName('standings')[0].rows[0].getElementsByTagName('th')[1])
 }
 
@@ -118,7 +118,7 @@ async function updateUI(data) {
     document.querySelector("#pageContent > div.second-level-menu > ul").insertBefore(orgstandings, document.querySelector("#pageContent > div.second-level-menu > ul > li:nth-child(5)"))
     addHeader("Organization")
     addHeader("Country")
-
+    document.getElementsByClassName('contest-status')[0].innerText = 'Country and organization standings'
     let userHandle;
     for (let row of document.getElementsByClassName('standings')[0].rows) {
         if (!row.getElementsByTagName('td')[1]) continue;
@@ -136,7 +136,7 @@ async function updateUI(data) {
 
         let rank = organizationRankList[userHandle.trim()]
         if (rank === undefined) rank = "?"
-        else rank += " ( " + data[userHandle.trim()] + " )"
+        else rank += " (" + data[userHandle.trim()] + ")"
         cell.innerText = rank
 
         rank = countryRankList[userHandle.trim()]
