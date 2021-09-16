@@ -10,7 +10,7 @@ var parent = document.querySelector("ul.second-level-menu-list")
 
 orgstandings.addEventListener('click', () => {
     console.log("clicked")
-
+    document.getElementsByClassName('contest-status')[0].innerText = 'Country and organization standings'
     const label = document.createElement("label")
     label.htmlFor = "org-filter"
     const labeltext = document.createTextNode("Select Organization")
@@ -118,7 +118,6 @@ async function updateUI(data) {
     document.querySelector("#pageContent > div.second-level-menu > ul").insertBefore(orgstandings, document.querySelector("#pageContent > div.second-level-menu > ul > li:nth-child(5)"))
     addHeader("Organization")
     addHeader("Country")
-    document.getElementsByClassName('contest-status')[0].innerText = 'Country and organization standings'
     let userHandle;
     for (let row of document.getElementsByClassName('standings')[0].rows) {
         if (!row.getElementsByTagName('td')[1]) continue;
