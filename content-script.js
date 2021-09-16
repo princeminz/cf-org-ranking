@@ -8,15 +8,6 @@ orgstandings.appendChild(anchornode)
 var parent = document.querySelector("ul.second-level-menu-list")
 parent.appendChild(orgstandings)
 
-// orgstandings.addEventListener('mouseenter', () => {
-//     orgstandings.classList.add("backLava")
-// })
-// orgstandings.addEventListener('mouseleave', () => {
-//     orgstandings.classList.remove("backLava")
-// })
-
-
-
 orgstandings.addEventListener('click', () => {
     console.log("clicked")
 
