@@ -6,7 +6,275 @@ const textNode = document.createTextNode("Country and organization standings");
 anchorNode.appendChild(textNode)
 orgStandings.appendChild(anchorNode)
 
+const isoCountries = {
+    'Afghanistan': 'AF',
+    'Aland Islands': 'AX',
+    'Albania': 'AL',
+    'Algeria': 'DZ',
+    'American Samoa': 'AS',
+    'Andorra': 'AD',
+    'Angola': 'AO',
+    'Anguilla': 'AI',
+    'Antarctica': 'AQ',
+    'Antigua and Barbuda': 'AG',
+    'Argentina': 'AR',
+    'Armenia': 'AM',
+    'Aruba': 'AW',
+    'Australia': 'AU',
+    'Austria': 'AT',
+    'Azerbaijan': 'AZ',
+    'Bahamas': 'BS',
+    'Bahrain': 'BH',
+    'Bangladesh': 'BD',
+    'Barbados': 'BB',
+    'Belarus': 'BY',
+    'Belgium': 'BE',
+    'Belize': 'BZ',
+    'Benin': 'BJ',
+    'Bermuda': 'BM',
+    'Bhutan': 'BT',
+    'Bolivia': 'BO',
+    'Bosnia and Herzegovina': 'BA',
+    'Botswana': 'BW',
+    'Bouvet Island': 'BV',
+    'Brazil': 'BR',
+    'British Indian Ocean Territory': 'IO',
+    'Brunei': 'BN',
+    'Bulgaria': 'BG',
+    'Burkina Faso': 'BF',
+    'Burundi': 'BI',
+    'Bonaire, Saint Eustatius and Saba': 'BQ',
+    'Cambodia': 'KH',
+    'Cameroon': 'CM',
+    'Canada': 'CA',
+    'Cape Verde': 'CV',
+    'Curacao': 'CW',
+    'Cayman Islands': 'KY',
+    'Central African Republic': 'CF',
+    'Chad': 'TD',
+    'Chile': 'CL',
+    'China': 'CN',
+    'Christmas Island': 'CX',
+    'Cocos (Keeling) Islands': 'CC',
+    'Colombia': 'CO',
+    'Comoros': 'KM',
+    'Congo': 'CG',
+    'Democratic Republic of the Congo': 'CD',
+    'Cook Islands': 'CK',
+    'Costa Rica': 'CR',
+    'Ivory Coast': 'CI',
+    'Croatia': 'HR',
+    'Cuba': 'CU',
+    'Cyprus': 'CY',
+    'Czechia': 'CZ',
+    'Denmark': 'DK',
+    'Djibouti': 'DJ',
+    'Dominica': 'DM',
+    'Dominican Republic': 'DO',
+    'Ecuador': 'EC',
+    'Egypt': 'EG',
+    'El Salvador': 'SV',
+    'Equatorial Guinea': 'GQ',
+    'Eritrea': 'ER',
+    'Estonia': 'EE',
+    'Ethiopia': 'ET',
+    'Falkland Islands': 'FK',
+    'Faroe Islands': 'FO',
+    'Fiji': 'FJ',
+    'Finland': 'FI',
+    'France': 'FR',
+    'French Guiana': 'GF',
+    'French Polynesia': 'PF',
+    'French Southern Territories': 'TF',
+    'Gabon': 'GA',
+    'Gambia': 'GM',
+    'Georgia': 'GE',
+    'Germany': 'DE',
+    'Ghana': 'GH',
+    'Gibraltar': 'GI',
+    'Greece': 'GR',
+    'Greenland': 'GL',
+    'Grenada': 'GD',
+    'Guadeloupe': 'GP',
+    'Guam': 'GU',
+    'Guatemala': 'GT',
+    'Guernsey': 'GG',
+    'Guinea': 'GN',
+    'Guinea-Bissau': 'GW',
+    'Guyana': 'GY',
+    'Haiti': 'HT',
+    'Heard Island and McDonald Islands': 'HM',
+    'Vatican': 'VA',
+    'Honduras': 'HN',
+    'Hong Kong': 'HK',
+    'Hungary': 'HU',
+    'Iceland': 'IS',
+    'India': 'IN',
+    'Indonesia': 'ID',
+    'Iran': 'IR',
+    'Iraq': 'IQ',
+    'Ireland': 'IE',
+    'Isle of Man': 'IM',
+    'Israel': 'IL',
+    'Italy': 'IT',
+    'Jamaica': 'JM',
+    'Japan': 'JP',
+    'Jersey': 'JE',
+    'Jordan': 'JO',
+    'Kazakhstan': 'KZ',
+    'Kenya': 'KE',
+    'Kiribati': 'KI',
+    'South Korea': 'KR',
+    'North Korea': 'KP',
+    'Kuwait': 'KW',
+    'Kyrgyzstan': 'KG',
+    'Laos': 'LA',
+    'Latvia': 'LV',
+    'Lebanon': 'LB',
+    'Lesotho': 'LS',
+    'Liberia': 'LR',
+    'Libya': 'LY',
+    'Liechtenstein': 'LI',
+    'Lithuania': 'LT',
+    'Luxembourg': 'LU',
+    'Macao': 'MO',
+    'Macedonia': 'MK',
+    'Madagascar': 'MG',
+    'Malawi': 'MW',
+    'Malaysia': 'MY',
+    'Maldives': 'MV',
+    'Mali': 'ML',
+    'Malta': 'MT',
+    'Marshall Islands': 'MH',
+    'Martinique': 'MQ',
+    'Mauritania': 'MR',
+    'Mauritius': 'MU',
+    'Mayotte': 'YT',
+    'Mexico': 'MX',
+    'Micronesia': 'FM',
+    'Moldova': 'MD',
+    'Monaco': 'MC',
+    'Mongolia': 'MN',
+    'Montenegro': 'ME',
+    'Montserrat': 'MS',
+    'Morocco': 'MA',
+    'Mozambique': 'MZ',
+    'Myanmar': 'MM',
+    'Namibia': 'NA',
+    'Nauru': 'NR',
+    'Nepal': 'NP',
+    'Netherlands': 'NL',
+    'Netherlands Antilles': 'AN',
+    'New Caledonia': 'NC',
+    'New Zealand': 'NZ',
+    'Nicaragua': 'NI',
+    'Niger': 'NE',
+    'Nigeria': 'NG',
+    'Niue': 'NU',
+    'Norfolk Island': 'NF',
+    'Northern Mariana Islands': 'MP',
+    'Norway': 'NO',
+    'Oman': 'OM',
+    'Pakistan': 'PK',
+    'Palau': 'PW',
+    'Palestine': 'PS',
+    'Panama': 'PA',
+    'Papua New Guinea': 'PG',
+    'Paraguay': 'PY',
+    'Peru': 'PE',
+    'Philippines': 'PH',
+    'Pitcairn': 'PN',
+    'Poland': 'PL',
+    'Portugal': 'PT',
+    'Puerto Rico': 'PR',
+    'Qatar': 'QA',
+    'Reunion': 'RE',
+    'Romania': 'RO',
+    'Russia': 'RU',
+    'Rwanda': 'RW',
+    'Saint Barthelemy': 'BL',
+    'Saint Helena': 'SH',
+    'Saint Kitts and Nevis': 'KN',
+    'Saint Lucia': 'LC',
+    'Saint Martin': 'MF',
+    'Saint Pierre and Miquelon': 'PM',
+    'Saint Vincent and the Grenadines': 'VC',
+    'Samoa': 'WS',
+    'San Marino': 'SM',
+    'Sao Tome and Principe': 'ST',
+    'Saudi Arabia': 'SA',
+    'Senegal': 'SN',
+    'Serbia': 'RS',
+    'Serbia and Montenegro': 'CS',
+    'Seychelles': 'SC',
+    'Sierra Leone': 'SL',
+    'Singapore': 'SG',
+    'Slovakia': 'SK',
+    'Slovenia': 'SI',
+    'Solomon Islands': 'SB',
+    'Somalia': 'SO',
+    'South Africa': 'ZA',
+    'South Georgia and the South Sandwich Islands': 'GS',
+    'Spain': 'ES',
+    'Sri Lanka': 'LK',
+    'Sudan': 'SD',
+    'South Sudan': 'SS',
+    'Suriname': 'SR',
+    'Svalbard and Jan Mayen': 'SJ',
+    'Sint Maarten': 'SX',
+    'Swaziland': 'SZ',
+    'Sweden': 'SE',
+    'Switzerland': 'CH',
+    'Syria': 'SY',
+    'Taiwan': 'TW',
+    'Tajikistan': 'TJ',
+    'Tanzania': 'TZ',
+    'Thailand': 'TH',
+    'East Timor': 'TL',
+    'Togo': 'TG',
+    'Tokelau': 'TK',
+    'Tonga': 'TO',
+    'Trinidad and Tobago': 'TT',
+    'Tunisia': 'TN',
+    'Turkey': 'TR',
+    'Turkmenistan': 'TM',
+    'Turks and Caicos Islands': 'TC',
+    'Tuvalu': 'TV',
+    'Uganda': 'UG',
+    'Ukraine': 'UA',
+    'United Arab Emirates': 'AE',
+    'United Kingdom': 'GB',
+    'United States': 'US',
+    'United States Minor Outlying Islands': 'UM',
+    'Uruguay': 'UY',
+    'Uzbekistan': 'UZ',
+    'Vanuatu': 'VU',
+    'Venezuela': 'VE',
+    'Vietnam': 'VN',
+    'British Virgin Islands': 'VG',
+    'U.S. Virgin Islands': 'VI',
+    'Wallis and Futuna': 'WF',
+    'Western Sahara': 'EH',
+    'Yemen': 'YE',
+    'Zambia': 'ZM',
+    'Zimbabwe': 'ZW'
+};
+
+const colorClass = {
+    'newbie': 'gray',
+    'pupil': 'green',
+    'specialist': 'cyan',
+    'expert': 'blue',
+    'candidate master': 'violet',
+    'master': 'orange',
+    'international master': 'orange',
+    'grandmaster': 'red',
+    'international grandmaster': 'red',
+    'legendary grandmaster': 'legendary'
+}
+
 orgStandings.addEventListener('click', () => {
+    document.getElementsByClassName('custom-links-pagination')[0].remove()
     let ele = document.getElementsByClassName('contest-status')[0]
     if (!ele) ele = document.getElementsByClassName('contest-name')[0]
     ele.innerText = 'Country and organization standings'
@@ -98,9 +366,6 @@ orgStandings.addEventListener('click', () => {
         let handles = []
         // handles[i][0] => who, handles[i][1][0] => global rank, handles[i][1][1] => country rank, handles[i][1][2] => org rank
         if (currentOrg === "Any") {
-            // iterate over rankList
-            // check presence in countryData, orgData
-
             for (let handle in rankList) {
                 if (currentCountry === "Any" || countryData[handle] === currentCountry) {
                     handles[handle] = [rankList[handle], countryRankList[handle], organizationRankList[handle]]
@@ -115,8 +380,16 @@ orgStandings.addEventListener('click', () => {
             }
         }
 
+        handles = Object.keys((handles)).map(function (key) {
+            return [key, handles[key]]
+        })
+        handles.sort(function (a, b) {
+            return a[1][0] - b[1][0]
+        })
+
         let i = 0
-        for (let who in handles) {
+        for (let handle of handles) {
+            let who = handle[0]
             let row
             if (i & 1) {
                 row = light.cloneNode(true)
@@ -124,10 +397,33 @@ orgStandings.addEventListener('click', () => {
                 row = dark.cloneNode(true)
             }
             ++i
-            row.getElementsByTagName('td')[0].innerText = handles[who][0]
-            row.getElementsByTagName('td')[1].innerText = handles[who][1] ? handles[who][1] : "?"
-            row.getElementsByTagName('td')[2].innerText = handles[who][2] ? handles[who][2] : "?"
-            row.getElementsByTagName('td')[3].innerText = who
+            row.getElementsByTagName('td')[0].innerText = handle[1][0]
+            row.getElementsByTagName('td')[1].innerText = handle[1][1] ? handle[1][1] : "?"
+            row.getElementsByTagName('td')[2].innerText = handle[1][2] ? handle[1][2] : "?"
+            row.getElementsByTagName('td')[3].innerText = ""
+
+            let country = countryData[who]
+            const imgEle = document.createElement("img")
+            const titleEle = document.createElement("a")
+            if (country && isoCountries[country.trim()]) {
+                country = country.trim()
+                imgEle.src = "//codeforces.org/s/37729/images/flags-16/" + isoCountries[country].toLowerCase() + ".png"
+                imgEle.alt = country
+                imgEle.title = country
+                imgEle.className = "standings-flag"
+                row.getElementsByTagName('td')[3].append(imgEle)
+            }
+            titleEle.href = "/profile/" + who
+            titleEle.className = "rated-user user-" + colorClass[ratingList[who]]
+            let rankName = ratingList[who].split(' ')
+            let rank = ""
+            rankName.forEach(s => {
+                s = s.charAt(0).toUpperCase() + s.substring(1)
+                rank += s + " "
+            })
+            titleEle.title = rank + who
+            titleEle.innerText = who
+            row.getElementsByTagName('td')[3].append(titleEle)
             tbody.appendChild(row)
         }
     }
@@ -145,6 +441,7 @@ orgStandings.addEventListener('click', () => {
 
 
 let rankList = []
+let ratingList = []
 let organizationRankList = []
 let countryRankList = []
 let organizationWiseRankList = []
@@ -241,4 +538,14 @@ async function getOrganizationsAndCountry() {
     countryData = await response.json()
     await generateRankList(countryData, 0)
     await updateUI(orgData)
+    await getRatings()
+}
+
+async function getRatings() {
+    let response
+    let url = 'https://cf-api.vercel.app/api?contest=' + id + '&rank=1'
+    do {
+        response = await fetch(url)
+    } while (response.status !== 200);
+    ratingList = await response.json()
 }
