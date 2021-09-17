@@ -274,8 +274,9 @@ const colorClass = {
 }
 
 orgStandings.addEventListener('click', () => {
-    document.getElementsByClassName('custom-links-pagination')[0].remove()
-    let ele = document.getElementsByClassName('contest-status')[0]
+    let ele = document.getElementsByClassName('custom-links-pagination')[0]
+    if (ele) ele.remove()
+    ele = document.getElementsByClassName('contest-status')[0]
     if (!ele) ele = document.getElementsByClassName('contest-name')[0]
     ele.innerText = 'Country and organization standings'
     const orgLabel = document.createElement("label")
