@@ -12,6 +12,7 @@ orgStandings.addEventListener('click', () => {
     ele.innerText = 'Country and organization standings'
     const orgLabel = document.createElement("label")
     orgLabel.htmlFor = "org-filter"
+    orgLabel.id = "org-label"
     let labelText = document.createTextNode("Select Organization")
     orgLabel.appendChild(labelText)
     orgLabel.style.marginRight = "5px"
@@ -27,6 +28,7 @@ orgStandings.addEventListener('click', () => {
     const countryDropdown = document.createElement("select")
     countryDropdown.id = "country-filter"
     countryDropdown.style.marginLeft = "2.5em"
+    countryDiv.id = "country-div"
 
 
     orgList = []
@@ -68,6 +70,19 @@ orgStandings.addEventListener('click', () => {
     const tbody = standingsTable.getElementsByTagName('tbody')[0]
     Array.prototype.slice.call(tbody.children, 1).forEach(ele => ele.remove())
 
+    ele = document.getElementById("org-label")
+    if (ele) {
+        ele.remove()
+    }
+    ele = document.getElementById("org-filter")
+    if (ele) {
+        ele.remove()
+    }
+    ele = document.getElementById("country-div")
+    if (ele) {
+        ele.remove()
+    }
+
     document.querySelector("#pageContent").insertBefore(orgLabel, document.querySelector("#pageContent > div.datatable"))
     document.querySelector("#pageContent").insertBefore(orgDropdown, document.querySelector("#pageContent > div.datatable"))
 
@@ -86,16 +101,16 @@ orgStandings.addEventListener('click', () => {
             // iterate over rankList
             // check presence in countryData, orgData
 
-            for(let handle in rankList) {
+            for (let handle in rankList) {
                 if (currentCountry === "Any" || countryData[handle] === currentCountry) {
-                    handles[handle] = [rankList[handle], organizationRankList[handle], countryRankList[handle]]
+                    handles[handle] = [rankList[handle], countryRankList[handle], organizationRankList[handle]]
                 }
             }
         } else {
             for (let users of organizationWiseRankList[currentOrg]) {
                 let handle = users[1]
                 if (currentCountry === "Any" || countryData[handle] === currentCountry) {
-                    handles[handle] = [users[0], organizationRankList[handle], countryRankList[handle]]
+                    handles[handle] = [users[0], countryRankList[handle], organizationRankList[handle]]
                 }
             }
         }
@@ -167,7 +182,7 @@ function generateRankList(data, org = 1) {
         });
         let idx = 0
         userList.forEach(data => {
-            if (org) organizationRankList[data[1]] = ++idx
+            if (org === 1) organizationRankList[data[1]] = ++idx
             else countryRankList[data[1]] = ++idx
         });
     }
