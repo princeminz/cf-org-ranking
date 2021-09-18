@@ -312,7 +312,7 @@ orgStandings.addEventListener('click', () => {
     for (let org of orgList) {
         orgOption = document.createElement("option")
         orgOption.value = org
-        optionText = document.createTextNode(org)
+        optionText = document.createTextNode(org + " ( " + organizationWiseRankList[org].length + " )")
         orgOption.appendChild(optionText)
         orgDropdown.appendChild(orgOption)
     }
@@ -325,7 +325,7 @@ orgStandings.addEventListener('click', () => {
     countryList.forEach(country => {
         countryOption = document.createElement("option")
         countryOption.value = country
-        optionText = document.createTextNode(country)
+        optionText = document.createTextNode(country + " ( " + countryWiseRankList[country].length + " )")
         countryOption.appendChild(optionText)
         countryDropdown.appendChild(countryOption)
     })
@@ -415,8 +415,8 @@ orgStandings.addEventListener('click', () => {
                 row.getElementsByTagName('td')[3].append(imgEle)
             }
             titleEle.href = "/profile/" + who
-            titleEle.className = "rated-user user-" + colorClass[ratingList[who]]
-            let rankName = ratingList[who].split(' ')
+            titleEle.className = "rated-user user-" + colorClass[ratingData[who]]
+            let rankName = ratingData[who].split(' ')
             let rank = ""
             rankName.forEach(s => {
                 s = s.charAt(0).toUpperCase() + s.substring(1)
@@ -442,13 +442,14 @@ orgStandings.addEventListener('click', () => {
 
 
 let rankList = []
-let ratingList = []
 let organizationRankList = []
 let countryRankList = []
 let organizationWiseRankList = []
+let countryWiseRankList = []
 let countryList = new Set()
 let countryData
 let orgData
+let ratingData
 let id = location.href.split('/')[4]
 
 async function getContestantHandles(contestId) {
@@ -460,11 +461,12 @@ getContestantHandles(id).then(data => {
     data.result.rows.forEach(element => {
         rankList[element.party.members[0].handle] = element.rank
     });
-    getOrganizationsAndCountry()
+    fetchDataFromAPI()
 });
 
-function generateRankList(data, org = 1) {
+function generateRankList(org = 1) {
     let curRankList = []
+    let data = org === 1 ? orgData : countryData
     for (let handle in data) {
         let belongsTo = data[handle]
         if (org === 0) countryList.add(belongsTo)
@@ -474,6 +476,7 @@ function generateRankList(data, org = 1) {
         }
     }
     if (org === 1) organizationWiseRankList = curRankList
+    else countryWiseRankList = curRankList
     for (let key in curRankList) {
         let userList = curRankList[key].sort(function (a, b) {
             return a[0] - b[0];
@@ -494,7 +497,7 @@ function addHeader(title) {
     document.getElementsByClassName('standings')[0].rows[0].insertBefore(th, document.getElementsByClassName('standings')[0].rows[0].getElementsByTagName('th')[1])
 }
 
-async function updateUI(data) {
+async function updateUI() {
     document.querySelector("#pageContent > div.second-level-menu > ul").insertBefore(orgStandings, document.querySelector("#pageContent > div.second-level-menu > ul > li:nth-child(5)"))
     addHeader("Organization")
     addHeader("Country")
@@ -515,7 +518,7 @@ async function updateUI(data) {
 
         let rank = organizationRankList[userHandle.trim()]
         if (rank === undefined) rank = "?"
-        else rank += " (" + data[userHandle.trim()] + ")"
+        else rank += " (" + orgData[userHandle.trim()] + ")"
         cell.innerText = rank
 
         rank = countryRankList[userHandle.trim()]
@@ -524,29 +527,17 @@ async function updateUI(data) {
     }
 }
 
-async function getOrganizationsAndCountry() {
+async function fetchDataFromAPI() {
     let response
     let url = 'https://cf-api.vercel.app/api?contest=' + id
     do {
         response = await fetch(url)
     } while (response.status !== 200);
-    orgData = await response.json()
-    await generateRankList(orgData)
-    url = 'https://cf-api.vercel.app/api?contest=' + id + '&country=1'
-    do {
-        response = await fetch(url)
-    } while (response.status !== 200);
-    countryData = await response.json()
-    await generateRankList(countryData, 0)
-    await updateUI(orgData)
-    await getRatings()
-}
-
-async function getRatings() {
-    let response
-    let url = 'https://cf-api.vercel.app/api?contest=' + id + '&rank=1'
-    do {
-        response = await fetch(url)
-    } while (response.status !== 200);
-    ratingList = await response.json()
+    let data = await response.json()
+    orgData = data.organization
+    countryData = data.country
+    ratingData = data.rank
+    await generateRankList()
+    await generateRankList(0)
+    await updateUI()
 }
