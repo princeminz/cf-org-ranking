@@ -261,6 +261,7 @@ const isoCountries = {
 };
 
 const colorClass = {
+    'unrated': 'black',
     'newbie': 'gray',
     'pupil': 'green',
     'specialist': 'cyan',
@@ -415,13 +416,15 @@ orgStandings.addEventListener('click', () => {
                 row.getElementsByTagName('td')[3].append(imgEle)
             }
             titleEle.href = "/profile/" + who
-            titleEle.className = "rated-user user-" + colorClass[ratingData[who]]
-            let rankName = ratingData[who].split(' ')
+            titleEle.className = "rated-user user-" + colorClass[ratingData[who] ? ratingData[who] : 'unrated']
             let rank = ""
-            rankName.forEach(s => {
-                s = s.charAt(0).toUpperCase() + s.substring(1)
-                rank += s + " "
-            })
+            if (ratingData[who]) {
+                let rankName = ratingData[who].split(' ')
+                rankName.forEach(s => {
+                    s = s.charAt(0).toUpperCase() + s.substring(1)
+                    rank += s + " "
+                })
+            } else rank = "Unrated "
             titleEle.title = rank + who
             titleEle.innerText = who
             row.getElementsByTagName('td')[3].append(titleEle)
