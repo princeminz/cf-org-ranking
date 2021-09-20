@@ -502,6 +502,10 @@ function addHeader(title) {
 
 async function updateUI() {
     document.querySelector("#pageContent > div.second-level-menu > ul").insertBefore(orgStandings, document.querySelector("#pageContent > div.second-level-menu > ul > li:nth-child(5)"))
+    document.querySelector("#pageContent > div.second-level-menu > ul > li.backLava").remove()
+    var script = document.createElement('script');
+    script.appendChild(document.createTextNode('$(".second-level-menu-list").lavaLamp({fx: "backout",speed: 700})'));
+    (document.body || document.head || document.documentElement).appendChild(script); 
     addHeader("Organization")
     addHeader("Country")
     let userHandle;
